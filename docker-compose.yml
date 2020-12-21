@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  postgres:
+    container_name: postgres
+    build:
+      context: .
+      dockerfile: ./dockerfile/postgres
+      network: bridge
+    image: postgres:0.1
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - bridge
+
+  cloudconductor:
+    container_name: cloudconductor
+    build:
+      context: .
+      dockerfile: ./dockerfile/cloudconductor
+      network: bridge
+    image: cloudconductor:0.1
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    ports:
+      - 80:8090
+    networks:
+      - bridge
+    command: ["/root/wrapper.sh","&&","/usr/sbin/httpd","-D","FOREGROUND"]
+networks:
+  bridge:
+    driver: bridge

@@ -1,0 +1,12 @@
+# Use CentOS 7 as base image
+FROM centos:7
+
+# Update and install dependencies
+RUN yum update -y \
+    && yum install httpd java-1.8.0-openjdk wget -y \
+    && wget -O /etc/yum.repos.d/cloudconductor.repo http://yum.cloudconductor.net/cloudconductor.repo \
+    && yum install cloudconductor -y \
+    && yum clean all
+ADD ./config/cloudconductor.properties /opt/cloudconductor/
+ADD ./wrapper/wrapper.sh /root/
+RUN chmod +x /root/wrapper.sh
