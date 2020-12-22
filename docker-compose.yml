@@ -8,7 +8,7 @@ services:
       network: bridge
     image: postgres:0.1
     volumes:
-      - ./database:/var/lib/postgresql/data
+      - ./database/data:/var/lib/postgresql/data
     ports:
       - 5432:5432
     networks:
